@@ -87,20 +87,23 @@ const Lav = () => {
   const poll = async () => {
     const res = await fetch("/api/lav").then(res => res.json())
     setCur(Object.fromEntries(res.map(i => [i.id, i])))
-    if(!ord.length)
-      setOrd(res.sort((a, b) => b.ts - a.ts).map(i => i.id))
+    setOrd(res.sort((a, b) => b.ts - a.ts).map(i => i.id))
   }
 
   useEffect(() => {
     poll()
     con()
-    setInterval(poll, 1000 * 60)
   }, [])
 
   return (
     <>
       <h2>Load Average</h2>
-      <table style={{ fontFamily: "monospace" }}>
+      <table style={{
+        display: "block",
+        fontFamily: "monospace",
+        overflowX: "scroll",
+        whiteSpace: "nowrap",
+      }}>
         <thead>
           <tr>
             <th>Name</th>
@@ -125,11 +128,9 @@ const Lav = () => {
                     .map(i => String(Math.round(i * 1000) / 1000))
                     .map(s => {
                       const [before, after = ""] = s.split(".")
-                      if(before === "0")
-                        return `0.${after + "000"}`.slice(0, 5)
                       if(before.length >= 3)
                         return before
-                      return `${before}.${after + "00"}`.slice(0, 4)
+                      return `${before}.${(after + "000").slice(0, 3)}`
                     })
                     .join(",")
                   }]

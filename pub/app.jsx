@@ -74,7 +74,7 @@ const Lav = () => {
 
   const con = () => {
     const url = new URL("/ws", location.href)
-    url.protocol = "ws"
+    url.protocol = "ws" + url.protocol.slice(4, -1)
 
     const ws = new WebSocket(url)
     ws.onmessage = onMsg

@@ -14,13 +14,15 @@ auto main() {
   const token = readRequiredOption!string("token", "api authorization");
 
   ushort port = 8080;
+  auto pubDir = "pub";
   readOption("port", &port, "listen port");
+  readOption("pubDir", &pubDir, "pub dir location");
 
   auto settings = new HTTPServerSettings;
   settings.port = port;
 
   auto router = new URLRouter;
-  router.get("*", serveStaticFiles("pub"));
+  router.get("*", serveStaticFiles(pubDir));
 
   ////
 

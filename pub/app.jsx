@@ -12,9 +12,9 @@ const cOk   = { background: "lime", color: "black" }
 const cWarn = { background: "yellow", color: "black", fontWeight: "bold" }
 const cErr  = { background: "red", color: "white", fontWeight: "bold" }
 
-// 3日
+// 1 day
 const isGone = ts =>
-  (Date.now() - new Date(ts).getTime()) / 1000 > 3600 * 24 * 3
+  Date.now() - new Date(ts).getTime() > 1000 * 3600 * 24
 
 const dateFmt = ts => {
   const date = new Date(ts)
@@ -86,8 +86,10 @@ const Lav = () => {
 
   const poll = async () => {
     const res = await fetch("/api/lav").then(res => res.json())
-    setCur(Object.fromEntries(res.map(i => [i.id, i])))
-    setOrd(res.sort((a, b) => b.ts - a.ts).map(i => i.id))
+    const current = Object.fromEntries(res.map(i => [i.id, i]))
+    setCur(current)
+    setOrd(Object.keys(current).sort())
+    // setOrd(res.sort((a, b) => b.ts - a.ts).map(i => i.id))
   }
 
   useEffect(() => {
